@@ -1,3 +1,37 @@
 Aim: Execute DDL/DML statements which demonstrate the use of views. Update the base table using its corresponding view. Also consider restrictions on updatable views and perform view creation from multiple tables. 
 Objective: Understand the concept of view and perform various operations on view
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--single view
+
+create database fairy;
+use fairy;
+create table custo(name varchar(12),nation varchar(13),number int(3));
+insert into custo value('alex','bhutan',12);
+insert into custo value('anny','brazil',34);
+insert into custo value('mary','india',44);
+insert into custo value('anddrew ','japan',4);
+insert into custo value('samy','china',3);
+select*from custo;
+create view part as select number,nation from custo where number > 30;
+select* from part;
+
+--multiple view
+
+create database fairy;
+use fairy;
+create table stu_detail(id int(3)primary key, sname varchar(6),adress varchar(9));
+insert into stu_detail value(1,'raj','ashti');
+insert into stu_detail value(1,'raj','ashti');
+insert into stu_detail value(1,'raj','ashti');
+insert into stu_detail value(1,'raj','ashti');
+insert into stu_detail value(1,'raj','ashti');
+select * from stu_detail;
+create table stu_mark(id int(3) primary  key,sname varchar(7),mark int(7),age int(2));
+insert into stu_mark value(1,'raj',56,21);
+insert into stu_mark value(1,'raj',56,21);
+insert into stu_mark value(1,'raj',56,21);
+insert into stu_mark value(1,'raj',56,21);
+insert into stu_mark value(1,'raj',56,21);
+select * from stu_mark;
+create view marksview as select stu_detail.sname,stu_detail.adress,stu_mark.mark from stu_detail,stu_mark where stu_detail.sname=stu;
+select * from marksview;
