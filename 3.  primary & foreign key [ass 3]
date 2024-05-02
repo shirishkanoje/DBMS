@@ -1,3 +1,20 @@
 Aim: Create Table with primary key and foreign key constraints. 
 Objective: Understand the primary key and foreign key constraints.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+create database fairy;
+use fairy;
+create table person2(id int(2)not null,lname varchar(21)not null,fname varchar(8),age int(3),constraint pk_person primary key (id,fname));
+desc person2;
+insert into person2 value(1,'doe','john',33);
+insert into person2 value(2,'kohli','virat',35);
+insert into person2 value(3,'dhoni','ms',50);
+insert into person2 value(4,'sharma','rohit',33);
+select * from person2;
+create table order2(orderid int(2)not null,orderno int(5)not null,id int,primary key(orderid),foreign key(id) references person2(id));
+desc order2;
+insert into order2 value(1,5674,3);
+insert into order2 value(2,9424,3);
+insert into order2 value(3,562323);
+insert into order2 value(4,1234,1);
+insert into order2 value(7,5674,6);
+select* from order2;
