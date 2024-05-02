@@ -1,6 +1,6 @@
 Aim: Design and implement a database (for assignment no 1) using DDL statements and apply normalization on them. 
 Objective: Understand the Data Definition Language and commands to design Database.
-
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 command:-
 create database ass;
  use ass;
@@ -24,3 +24,7 @@ values(1489,'Sahil','Mumbai');
  delete from Employee
 where Ename='Sahil';
 select * from Employee;
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
