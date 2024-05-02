@@ -2,3 +2,69 @@ Aim: Design any database with at least 3 entities and relationships between them
 Objectives: 1. To design a database system. 2. To draw an ER/EER diagram for the system.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+create database Library;
+use Library;
+
+CREATE TABLE Authors (
+    author_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL
+);
+CREATE TABLE Books (
+    book_id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    publication_year INT
+);
+
+
+CREATE TABLE Borrowers (
+    borrower_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL
+);
+
+
+CREATE TABLE Written_By (
+    book_id INT,
+    author_id INT,
+    PRIMARY KEY (book_id, author_id),
+    FOREIGN KEY (book_id) REFERENCES Books(book_id),
+    FOREIGN KEY (author_id) REFERENCES Authors(author_id)
+);
+
+
+CREATE TABLE Borrows (
+    book_id INT,
+    borrower_id INT,
+    borrow_date DATE,
+    PRIMARY KEY (book_id, borrower_id),
+    FOREIGN KEY (book_id) REFERENCES Books(book_id),
+    FOREIGN KEY (borrower_id) REFERENCES Borrowers(borrower_id)
+);
+
+
+INSERT INTO Authors (name) VALUES ('Author A'), ('Author B');
+
+
+INSERT INTO Books (title, publication_year) VALUES ('Book 1', 2022), ('Book 2', 2023);
+
+
+INSERT INTO Borrowers (name, email) VALUES ('Borrower 1', 'b1@example.com'), ('Borrower 2', 'b2@example.com');
+
+
+INSERT INTO Written_By (book_id, author_id) VALUES (1, 1), (1, 2), (2, 1);
+
+
+INSERT INTO Borrows (book_id, borrower_id, borrow_date) VALUES (1, 1, '2024-01-01'), (2, 2, '2024-02-01');
+
+
+SELECT * FROM Authors;  
+SELECT * FROM Books;
+SELECT * FROM Borrowers;
+SELECT * FROM Written_By;
+SELECT * FROM Borrows;
+
+
+
+
+
+
