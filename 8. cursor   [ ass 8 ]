@@ -1,3 +1,68 @@
 Aim: Write a PL/SQL block to implement all types of cursor. 
 Objective: 1] to understand the basic concept of cursors used in PL/SQL
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--cursor 1
+
+select*from student_infor;
+
+delimiter $$
+
+create procedure pass_st()
+
+begin
+
+declare mrk int;
+
+declare nm varchar(10);
+
+declare v_finish int default 0;
+
+declare cur_1 cursor for select name, marks from student_info where marks>23;
+
+declare continue handler for not found set v_finish=1;
+
+open cur_1;
+
+get_stud:loop
+
+fetch cur_1 into nm,mrk;
+
+select nm,mrk;
+
+if v_finish=1 then
+
+leave get_stud;
+
+end if;
+
+end loop get_stud;
+
+end$$
+
+call pass_st();
+$$
+
+
+
+--cursor2
+
+show databases;
+use send;
+show tables;
+create table student_info(id int(2),name varchar(22),pass varchar(9),mobileno int(10),marks int(2));
+insert into student_infor value(1,'abc','hfgd',537389,76);
+insert into student_infor value(2,'yuc','jh8d',456255,96);
+insert into student_infor value(3,'opl','hfgd',537357,58);
+insert into student_infor value(4,'cds','hfgd',537324,77);
+insert into student_infor value(5,'agh','hfgd',537325,78);
+insert into student_infor value(6,'ahy','hfgd',537345,79);
+insert into student_infor value(7,'ahj','hfgd',537345,80);
+insert into student_infor value(8,'ayz','hfgd',537354,71);
+insert into student_infor value(9,'acn','hfgd',537312,88);
+select*from student_infor;
+delimiter $$
+create procedure pass_st()
+begin
+declare mrk int;
+declare nm varchar(10);
+declare v_finish int default 0 ;
