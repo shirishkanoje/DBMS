@@ -2,18 +2,15 @@ Aim: Design and implement a database (for assignment no 1) using DDL statements 
 Objective: Understand the Data Definition Language and commands to design Database.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 command:-
-create database employee;
-use employee;
-create table depart (id int, sname varchar(7), subject varchar(9));
-insert into depart value(10, 'mayur', 'dm,oop');
-insert into depart value (15, 'mayuri','cg,pa');
-insert into depart value (17, 'sanket', 'dsa');
-select* from depart;
-create table departme(id int, sname varchar(7), subject varchar(9));
-insert into departme value(10, 'mayur', 'dm');
-insert into departme value(10, 'mayur', 'oop');
-insert into departme value (15, 'mayuri','cg');
-insert into departme value (15,'mayuri', 'pa');
-insert into departme value (17, 'sanket', 'dsa');
-select *from departme;
+use fairy;
+create table departme1(id int, sname varchar(7), subject varchar(9));
+insert into departmel value(10, 'mayur', 'dm, oop');
+insert into departme1 value (15, 'mayuri', 'cg,pa');
+insert into departmel value (17, 'sanket', 'dsa');
+select * from departme1;
+update departme1 set subject='dm'where sname='mayur';
+insert into departmel value(10, 'mayur', 'oop');
+update departme1 set subject='cg'where sname='mayuri';
+insert into departmel value (15, 'mayuri', 'pa');
+select * from departme1;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
