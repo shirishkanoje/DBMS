@@ -1,0 +1,26 @@
+Aim: Design and implement a database (for assignment no 1) using DDL statements and apply normalization on them. 
+Objective: Understand the Data Definition Language and commands to design Database.
+
+command:-
+create database ass;
+ use ass;
+show tables;
+create table Employee(Emp_id int, Ename varchar(20),Address varchar(20));
+show tables;
+desc Employee;
+select * from Employee;
+insert into Employee values(1256,'Mini','AIT Pune');
+select * from Employee;
+insert into Employee values
+	(8563,'Aditya','Aundh Pune');
+select * from Employee;
+update Employee
+set Emp_id=7834
+where Ename='Mini';
+select * from Employee;
+insert into Employee
+values(1489,'Sahil','Mumbai');
+ select * from Employee;
+ delete from Employee
+where Ename='Sahil';
+select * from Employee;
