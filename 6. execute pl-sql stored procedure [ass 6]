@@ -1,3 +1,96 @@
 Aim: Write and execute PL/SQL stored procedure and function to perform a suitable task on the database. Demonstrate its use. 
 Objective: 1) To understand the differences between procedure and function 2) To understand commands related to procedure and function
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Ensure the database exists and is selected
+CREATE DATABASE IF NOT EXISTS CompanyDB;
+USE CompanyDB;
+
+-- Ensure the tables exist
+CREATE TABLE IF NOT EXISTS Departments (
+    department_id INT PRIMARY KEY AUTO_INCREMENT,
+    department_name VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Employees (
+    employee_id INT PRIMARY KEY AUTO_INCREMENT,
+    employee_name VARCHAR(255) NOT NULL,
+    department_id INT,
+    hire_date DATE,
+    FOREIGN KEY (department_id) REFERENCES Departments(department_id)
+);
+
+-- Insert sample data
+INSERT INTO Departments (department_name) 
+VALUES ('HR'), ('Engineering'), ('Sales')
+ON DUPLICATE KEY UPDATE department_name = VALUES(department_name);
+
+INSERT INTO Employees (employee_name, department_id, hire_date) 
+VALUES 
+    ('Alice', 1, '2023-01-01'), 
+    ('Bob', 2, '2023-02-01'), 
+    ('Charlie', 3, '2023-03-01'),
+    ('Dave', 2, '2023-04-01')
+ON DUPLICATE KEY UPDATE employee_name = VALUES(employee_name);
+
+-- Step 1: Create a stored procedure to add a new employee to a specified department
+DELIMITER //
+CREATE PROCEDURE AddEmployeeToDepartment (
+    IN emp_name VARCHAR(255),
+    IN dept_name VARCHAR(255),
+    IN hire_date DATE
+)
+BEGIN
+    DECLARE dept_id INT;
+
+    -- Find the department ID by department name
+    SELECT department_id INTO dept_id
+    FROM Departments
+    WHERE department_name = dept_name;
+
+    -- If the department exists, add the new employee
+    IF dept_id IS NOT NULL THEN
+        INSERT INTO Employees (employee_name, department_id, hire_date)
+        VALUES (emp_name, dept_id, hire_date);
+    ELSE
+        -- If the department does not exist, raise an exception
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Department not found';
+    END IF;
+END //
+DELIMITER ;
+
+-- Step 2: Use the stored procedure to add an employee to 'Engineering'
+CALL AddEmployeeToDepartment('Eve', 'Engineering', '2023-05-01');
+
+-- Verify that the new employee was added
+SELECT * FROM Employees WHERE employee_name = 'Eve';
+
+-- Step 3: Create a function to count the total number of employees in a given department
+DELIMITER //
+CREATE FUNCTION GetEmployeeCountByDepartment (
+    dept_name VARCHAR(255)
+) RETURNS INT
+BEGIN
+    DECLARE emp_count INT;
+
+    -- Get the department ID
+    SELECT department_id INTO emp_count
+    FROM Departments
+    WHERE department_name = dept_name;
+
+    -- If the department exists, count the employees
+    IF emp_count IS NOT NULL THEN
+        SELECT COUNT(employee_id) INTO emp_count
+        FROM Employees
+        WHERE department_id = emp_count;
+    ELSE
+        -- If the department doesn't exist, return -1 as an error code
+        SET emp_count = -1;
+    END IF;
+
+    RETURN emp_count;
+END //
+DELIMITER ;
+
+-- Step 4: Use the function to get the employee count for 'Engineering'
+SELECT GetEmployeeCountByDepartment('Engineering') AS EngineeringEmployeeCount;
