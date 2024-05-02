@@ -46,23 +46,97 @@ $$
 
 --cursor2
 
-show databases;
-use send;
-show tables;
-create table student_info(id int(2),name varchar(22),pass varchar(9),mobileno int(10),marks int(2));
-insert into student_infor value(1,'abc','hfgd',537389,76);
-insert into student_infor value(2,'yuc','jh8d',456255,96);
-insert into student_infor value(3,'opl','hfgd',537357,58);
-insert into student_infor value(4,'cds','hfgd',537324,77);
-insert into student_infor value(5,'agh','hfgd',537325,78);
-insert into student_infor value(6,'ahy','hfgd',537345,79);
-insert into student_infor value(7,'ahj','hfgd',537345,80);
-insert into student_infor value(8,'ayz','hfgd',537354,71);
-insert into student_infor value(9,'acn','hfgd',537312,88);
-select*from student_infor;
-delimiter $$
-create procedure pass_st()
-begin
-declare mrk int;
-declare nm varchar(10);
-declare v_finish int default 0 ;
+-- Ensure the database exists and is selected
+CREATE DATABASE IF NOT EXISTS CompanyDB;
+USE CompanyDB;
+
+-- Ensure the tables exist
+CREATE TABLE IF NOT EXISTS Departments (
+    department_id INT PRIMARY KEY AUTO_INCREMENT,
+    department_name VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Employees (
+    employee_id INT PRIMARY KEY AUTO_INCREMENT,
+    employee_name VARCHAR(255) NOT NULL,
+    department_id INT,
+    hire_date DATE,
+    FOREIGN KEY (department_id) REFERENCES Departments(department_id)
+);
+
+-- Insert sample data
+INSERT INTO Departments (department_name) 
+VALUES ('HR'), ('Engineering'), ('Sales')
+ON DUPLICATE KEY UPDATE department_name = VALUES(department_name);
+
+INSERT INTO Employees (employee_name, department_id, hire_date) 
+VALUES 
+    ('Alice', 1, '2023-01-01'), 
+    ('Bob', 2, '2023-02-01'), 
+    ('Charlie', 3, '2023-03-01'),
+    ('Dave', 2, '2023-04-01'),
+    ('Eve', 2, '2023-05-01')
+ON DUPLICATE KEY UPDATE employee_name = VALUES(employee_name);
+
+-- PL/SQL block to demonstrate different types of cursors
+DECLARE
+    -- Implicit cursor to fetch a single record
+    v_department_id INT;
+    v_department_name VARCHAR(255);
+
+    -- Explicit cursor to fetch all employees
+    CURSOR cur_employees IS
+        SELECT employee_name, department_id FROM Employees;
+
+    -- Explicit cursor with parameter
+    CURSOR cur_department_employees(dept_id INT) IS
+        SELECT employee_name FROM Employees WHERE department_id = dept_id;
+
+    -- Ref cursor type declaration and variable
+    TYPE ref_cursor_type IS REF CURSOR;
+    ref_cursor ref_cursor_type;
+
+BEGIN
+    -- Using implicit cursor to get department details
+    SELECT department_id, department_name INTO v_department_id, v_department_name
+    FROM Departments
+    WHERE department_name = 'Engineering';
+
+    DBMS_OUTPUT.PUT_LINE('Department ID: ' || v_department_id);
+    DBMS_OUTPUT.PUT_LINE('Department Name: ' || v_department_name);
+
+    -- Using explicit cursor to fetch and display all employees
+    OPEN cur_employees;
+    LOOP
+        FETCH cur_employees INTO v_department_name, v_department_id;
+        EXIT WHEN cur_employees%NOTFOUND;
+
+        DBMS_OUTPUT.PUT_LINE('Employee: ' || v_department_name || ', Department ID: ' || v_department_id);
+    END LOOP;
+    CLOSE cur_employees;
+
+    -- Using explicit cursor with parameter to fetch employees in Engineering
+    OPEN cur_department_employees(v_department_id);
+    LOOP
+        FETCH cur_department_employees INTO v_department_name;
+        EXIT WHEN cur_department_employees%NOTFOUND;
+
+        DBMS_OUTPUT.PUT_LINE('Engineering Employee: ' || v_department_name);
+    END LOOP;
+    CLOSE cur_department_employees;
+
+    -- Using ref cursor to dynamically fetch employees from Sales department
+    OPEN ref_cursor FOR 
+        SELECT employee_name FROM Employees WHERE department_id = 
+            (SELECT department_id FROM Departments WHERE department_name = 'Sales');
+    
+    LOOP
+        FETCH ref_cursor INTO v_department_name;
+        EXIT WHEN ref_cursor%NOTFOUND;
+
+        DBMS_OUTPUT.PUT_LINE('Sales Employee: ' || v_department_name);
+    END LOOP;
+    CLOSE ref_cursor;
+
+END;
+
