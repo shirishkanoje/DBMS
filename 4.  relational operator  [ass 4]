@@ -2,3 +2,28 @@ Aim: Perform following SQL queries on the database created in assignment 1. Impl
 Objective: Understand the sql operations, functions and complex queries.
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--Arithmatic
+
+create database fairy;
+use fairy;
+create table emplo(eid int primary key,ename varchar(50),ecity varchar(20),esalary int not null,ebonus int not null);
+insert into emplo value (102, 'tushar', 'pune', 10000,600);
+insert into emplo value (103, 'vivek', 'nashik', 46000,900);
+insert into emplo value (104, 'sagar', 'goa',78900,890);
+select *from emplo; 
+select esalary+ebonus as etotalsalary from emplo;
+select esalary-ebonus as etotal from emplo;
+select esalary*ebonus as etotal from emplo;
+select esalary/ebonus as etotal from emplo;
+select *from emplo;
+
+--boolean
+
+use dd;
+create table emplo(eid int primary key,ename varchar(20),
+ecity varchar(20), esalary int not null, ebonus int not null);
+insert into emplo value(102,'tushar','pune',10000,600);
+insert into emplo value(103,'vivek','dalib',46000,900);
+insert into emplo value(104,'sagar','rampur',78900,890);
+select*from emplo;
+select esalary+ebonus as etotal from emplo;
